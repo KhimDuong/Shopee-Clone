@@ -60,7 +60,7 @@ public class SecurityConfig {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**")
-                        .allowedOrigins("https://shopee-web-clone-wine.vercel.app", "https://postman.com", "http://192.168.0.9:3000") // 👈 sửa điểm này
+                        .allowedOrigins("https://shopee-web-clone-wine.vercel.app", "https://postman.com", "http://192.168.246.1:3000", "http://localhost:3000/") // 👈 sửa điểm này
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                         .allowedHeaders("*")
                         .allowCredentials(true);
