@@ -1,21 +1,31 @@
 package com.shopeeclone.shopee_api.security;
 
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.security.Keys;
-import org.springframework.stereotype.Component;
-
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.Date;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import io.github.cdimascio.dotenv.Dotenv;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.security.Keys;
+
 @Component
 public class JwtUtil {
 
-    private final String jwtSecret = "shopee_clone_secret_shopee_clone_secret"; // must be at least 256-bit for HS256
-    private final long jwtExpirationMs = 86400000; // 1 day
+    private final String jwtSecret;
+    private final long jwtExpirationMs;
 
-    private final Key key = Keys.hmacShaKeyFor(jwtSecret.getBytes(StandardCharsets.UTF_8));
+    private final Key key;
+
+    @Autowired
+    public JwtUtil(Dotenv dotenv) {
+        this.jwtSecret = dotenv.get("JWT_SECRET");
+        this.jwtExpirationMs = Long.parseLong(dotenv.get("JWT_EXPIRATION", "86400000"));
+        this.key = Keys.hmacShaKeyFor(jwtSecret.getBytes(StandardCharsets.UTF_8));
+    }
 
     public String generateToken(String username) {
         return Jwts.builder()
