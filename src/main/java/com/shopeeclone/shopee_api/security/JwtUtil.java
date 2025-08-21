@@ -1,30 +1,34 @@
 package com.shopeeclone.shopee_api.security;
 
-import java.nio.charset.StandardCharsets;
-import java.security.Key;
 import java.util.Date;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import io.github.cdimascio.dotenv.Dotenv;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.security.Keys;
 
 @Component
 public class JwtUtil {
 
-    private final String jwtSecret;
-    private final long jwtExpirationMs;
+    @Value("${app.jwt.secret}")
+    private String jwtSecret;
 
-    private final Key key;
+    @Value("${app.jwt.expiration-ms:86400000}")
+    private long jwtExpirationMs;
 
-    @Autowired
-    public JwtUtil(Dotenv dotenv) {
-        this.jwtSecret = dotenv.get("JWT_SECRET");
-        this.jwtExpirationMs = Long.parseLong(dotenv.get("JWT_EXPIRATION", "86400000"));
-        this.key = Keys.hmacShaKeyFor(jwtSecret.getBytes(StandardCharsets.UTF_8));
+    private java.security.Key key;
+
+    @jakarta.annotation.PostConstruct
+    void init() {
+        if (jwtSecret == null || jwtSecret.isBlank()) {
+            throw new IllegalStateException("Missing app.jwt.secret");
+        }
+        if (jwtSecret.length() < 32) {
+            throw new IllegalStateException("app.jwt.secret must be >= 32 characters");
+        }
+        key = io.jsonwebtoken.security.Keys.hmacShaKeyFor(
+            jwtSecret.getBytes(java.nio.charset.StandardCharsets.UTF_8));
     }
 
     public String generateToken(String username) {
