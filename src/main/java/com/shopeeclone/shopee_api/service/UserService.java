@@ -30,13 +30,31 @@ public class UserService {
     }
 
     public User upsertFromOAuth(String email, String name) {
-        return userRepository.findByEmail(email).orElseGet(() -> {
+    return userRepository.findByEmail(email)
+        .map(u -> {
+            boolean dirty = false;
+
+            // ensure Google users do NOT keep any password
+            if (u.getPassword() != null) {
+                u.setPassword(null);
+                dirty = true;
+            }
+
+            // ensure username exists
+            if (u.getUsername() == null || u.getUsername().isBlank()) {
+                u.setUsername(email); // or derive from email local-part
+                dirty = true;
+            }
+
+
+            return dirty ? userRepository.save(u) : u;
+        })
+        .orElseGet(() -> {
             User u = new User();
-            u.setUsername(email); // you can also use name if you prefer
             u.setEmail(email);
-            // generate a random password so it's not null
-            u.setPassword(java.util.UUID.randomUUID().toString());
-            // if your User entity has roles, set a default one here
+            u.setUsername(email);
+            u.setPassword(null);
+
             return userRepository.save(u);
         });
     }
