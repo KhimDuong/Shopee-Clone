@@ -69,22 +69,17 @@ public class SecurityConfig {
         return new WebMvcConfigurer() {
             @Override public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**")
-<<<<<<< Updated upstream
-                    .allowedOrigins(
-                        "https://shopee-web-clone-wine.vercel.app",
-                        "https://postman.com",
-                        "http://192.168.246.1:3000",
-                        "http://localhost:3000" // ← no trailing slash
-                    )
-                    .allowedMethods("GET","POST","PUT","DELETE","OPTIONS")
+
+
+                    .allowedOrigins("https://shopee-web-clone-wine.vercel.app"
+                            , "https://postman.com"
+                            , "http://192.168.246.1:3000"
+                            , "https://192.168.0.2"
+                            , "http://localhost:3000/")
+                    .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                     .allowedHeaders("*")
                     .allowCredentials(true);
-=======
-                        .allowedOrigins("https://shopee-web-clone-wine.vercel.app", "https://postman.com", "http://192.168.246.1:3000", "https://192.168.0.2", "http://localhost:3000/") // 👈 sửa điểm này
-                        .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
-                        .allowedHeaders("*")
-                        .allowCredentials(true);
->>>>>>> Stashed changes
+
             }
         };
     }
