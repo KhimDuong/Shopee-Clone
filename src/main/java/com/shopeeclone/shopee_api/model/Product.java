@@ -1,6 +1,11 @@
 package com.shopeeclone.shopee_api.model;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "products")
@@ -17,6 +22,9 @@ public class Product {
 
     //@Column(name = "price")
     private double price;
+
+    @Column(name = "image_url")
+    private String image_url;
 
     public Product(){
 
@@ -58,5 +66,13 @@ public class Product {
     public void setPrice (Double price)
     {
         this.price = price;
+    }
+
+    public String getImage_url() {
+        return image_url;
+    }
+
+    public void setImage_url(String image_url) {
+        this.image_url = image_url;
     }
 }
