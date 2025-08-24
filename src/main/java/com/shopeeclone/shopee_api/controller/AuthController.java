@@ -1,11 +1,5 @@
 package com.shopeeclone.shopee_api.controller;
 
-import com.shopeeclone.shopee_api.dto.AuthResponse;
-import com.shopeeclone.shopee_api.dto.LoginRequest;
-import com.shopeeclone.shopee_api.dto.RegisterRequest;
-import com.shopeeclone.shopee_api.model.User;
-import com.shopeeclone.shopee_api.security.JwtUtil;
-import com.shopeeclone.shopee_api.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -16,6 +10,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.shopeeclone.shopee_api.dto.AuthResponse;
+import com.shopeeclone.shopee_api.dto.LoginRequest;
+import com.shopeeclone.shopee_api.dto.RegisterRequest;
+import com.shopeeclone.shopee_api.model.User;
+import com.shopeeclone.shopee_api.security.JwtUtil;
+import com.shopeeclone.shopee_api.service.UserService;
 
 @RestController
 @RequestMapping("/api/auth")

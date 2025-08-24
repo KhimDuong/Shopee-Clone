@@ -1,12 +1,15 @@
 package com.shopeeclone.shopee_api.repository;
 
-import com.shopeeclone.shopee_api.model.Cart;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
-
 import java.util.List;
+import java.util.Optional;
 
-@Repository
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import com.shopeeclone.shopee_api.model.Cart;
+
 public interface CartRepository extends JpaRepository<Cart, Long> {
-    List<Cart> findByUserId(Long userId);
+  List<Cart> findByUserId(Long userId);
+  Optional<Cart> findByUserIdAndProductId(Long userId, Long productId);
+  void deleteByUserIdAndProductId(Long userId, Long productId);
+  void deleteByUserId(Long userId);
 }
