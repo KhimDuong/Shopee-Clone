@@ -14,12 +14,12 @@ public class UserController {
     private UserService userService;
 
     @GetMapping
-    public List<User> getAllUsers() {
-        return userService.getAllUsers();
+    public List<User> getAllUsers() {           // No admin yet.
+        return userService.getAllUsers();       // No need for get all users function.
     }
 
     @PostMapping
-    public User createUser(@RequestBody User user) {
-        return userService.createUser(user);
+    public User createUser(@RequestBody User user) {    // Already done in register in Auth controller
+        return userService.createUser(user);            // No need for create user function. 
     }
 }
