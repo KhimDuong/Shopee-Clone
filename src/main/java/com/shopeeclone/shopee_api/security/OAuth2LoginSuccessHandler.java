@@ -73,3 +73,6 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
         res.sendRedirect(frontendCallback);
     }
 }
+
+
+//THANH 1234edr2346534634456356
