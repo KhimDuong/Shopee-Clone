@@ -36,7 +36,7 @@ public class OrderController {
         return orderService.createOrder(userId, order);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{id}") // Temporary
     public void cancelOrder(@PathVariable Long id) {
         orderService.cancelOrder(id);
     }
