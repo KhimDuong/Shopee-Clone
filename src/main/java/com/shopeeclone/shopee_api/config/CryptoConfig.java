@@ -50,6 +50,7 @@ public class CryptoConfig {
         if (b64 == null) {
             throw new IllegalArgumentException("No master key for version: " + version);
         }
+        b64 = b64.trim();
         byte[] key = java.util.Base64.getDecoder().decode(b64);
         return new javax.crypto.spec.SecretKeySpec(key, "AES");
     }
