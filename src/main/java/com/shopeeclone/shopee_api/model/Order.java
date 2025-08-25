@@ -1,8 +1,14 @@
 package com.shopeeclone.shopee_api.model;
 
-import jakarta.persistence.*;
-import java.time.LocalDateTime;
-import java.util.List;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.Lob;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "orders")
@@ -12,7 +18,7 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // private LocalDateTime orderDate;
+    private String orderDate;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
@@ -20,7 +26,6 @@ public class Order {
 
     // @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     // private List<OrderItem> orderItems;
-
     @Column(name = "details_json", columnDefinition = "TEXT")
     private String detailsJson;
 
@@ -37,13 +42,13 @@ public class Order {
         this.id = id;
     }
 
-    // public LocalDateTime getOrderDate() {
-    //     return orderDate;
-    // }
+    public String getOrderDate() {
+        return orderDate;
+    }
 
-    // public void setOrderDate(LocalDateTime orderDate) {
-    //     this.orderDate = orderDate;
-    // }
+    public void setOrderDate(String orderDate) {
+        this.orderDate = orderDate;
+    }
 
     public User getUser() {
         return user;
@@ -56,11 +61,9 @@ public class Order {
     // public List<OrderItem> getOrderItems() {
     //     return orderItems;
     // }
-
     // public void setOrderItems(List<OrderItem> orderItems) {
     //     this.orderItems = orderItems;
     // }
-
     public String getDetailsJson() {
         return detailsJson;
     }
