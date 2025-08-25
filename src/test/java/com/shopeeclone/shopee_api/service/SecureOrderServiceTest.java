@@ -20,6 +20,7 @@ import static org.mockito.Mockito.when;
 import com.shopeeclone.shopee_api.config.CryptoConfig;
 import com.shopeeclone.shopee_api.model.Order;
 import com.shopeeclone.shopee_api.repository.OrderRepository;
+import com.shopeeclone.shopee_api.repository.UserRepository;
 import com.shopeeclone.shopee_api.security.Hkdf;
 
 public class SecureOrderServiceTest {
@@ -29,6 +30,7 @@ public class SecureOrderServiceTest {
     private AesGcmService aes;
     private CryptoConfig config;
     private OrderRepository repo;
+    private UserRepository userRepo;
 
     private SecretKey masterKey;
     private SecretKey derivedKey;
@@ -37,6 +39,7 @@ public class SecureOrderServiceTest {
     void setup() throws Exception {
         keyManager = mock(ClientKeyManager.class);
         repo = mock(OrderRepository.class);
+        userRepo = mock(UserRepository.class);
         config = mock(CryptoConfig.class);
         CryptoConfig.Gcm gcm = mock(CryptoConfig.Gcm.class);
 
@@ -46,7 +49,7 @@ public class SecureOrderServiceTest {
 
         // Initialize AES service with the mock config
         aes = new AesGcmService(config);
-        service = new SecureOrderService(keyManager, aes, config, repo);
+        service = new SecureOrderService(keyManager, aes, config, repo, userRepo);
 
         // Generate AES keys
         KeyGenerator kg = KeyGenerator.getInstance("AES");

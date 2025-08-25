@@ -10,7 +10,9 @@ import org.springframework.stereotype.Service;
 
 import com.shopeeclone.shopee_api.config.CryptoConfig;
 import com.shopeeclone.shopee_api.model.Order;
+import com.shopeeclone.shopee_api.model.User;
 import com.shopeeclone.shopee_api.repository.OrderRepository;
+import com.shopeeclone.shopee_api.repository.UserRepository;
 
 @Service
 public class SecureOrderService {
@@ -19,15 +21,18 @@ public class SecureOrderService {
     private final AesGcmService aes;
     private final CryptoConfig config;
     private final OrderRepository orderRepo;
+    private final UserRepository userRepo;
 
     public SecureOrderService(ClientKeyManager keyManager,
             AesGcmService aes,
             CryptoConfig config,
-            OrderRepository orderRepo) {
+            OrderRepository orderRepo,
+            UserRepository userRepo) {
         this.keyManager = keyManager;
         this.aes = aes;
         this.config = config;
         this.orderRepo = orderRepo;
+        this.userRepo = userRepo;
     }
 
     public Order saveOrder(Long clientId, Order order) throws Exception {
@@ -35,6 +40,11 @@ public class SecureOrderService {
         if (details == null || details.isBlank()) {
             throw new IllegalArgumentException("Order detailsJson is required for encryption");
         }
+
+        User user = userRepo.findById(clientId)
+                .orElseThrow(() -> new IllegalArgumentException("User not found with id: " + clientId));
+
+        order.setUser(user);
 
         SecretKey dk = keyManager.deriveDataKey(clientId);
         short ver = keyManager.getKeyVersion(clientId);
