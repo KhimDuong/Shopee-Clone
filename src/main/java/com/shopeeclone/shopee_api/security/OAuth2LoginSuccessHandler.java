@@ -1,6 +1,8 @@
 package com.shopeeclone.shopee_api.security;
 
 import java.io.IOException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -22,7 +24,7 @@ import jakarta.servlet.http.HttpServletResponse;
 public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
 
     @Value("${app.auth.frontend-callback}")
-    private String frontendCallback;
+    private String frontendCallback; // e.g. http://localhost:3000/products
 
     private final JwtUtil jwtUtil;
     private final UserService userService;
@@ -53,26 +55,26 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
             return;
         }
 
-        // Upsert local user (create if not exists; assign default role, e.g., BUYER)
+        // Upsert local user
         User user = userService.upsertFromOAuth(email, name);
 
-        // Issue your existing API JWT
+        // Issue API JWT (same token type as normal login)
         String jwt = jwtUtil.generateToken(user.getUsername());
 
-        // Put JWT in HttpOnly cookie
+        // (Optional) Also set HttpOnly cookie – harmless to keep for server-side checks
         ResponseCookie cookie = ResponseCookie.from("jwt", jwt)
                 .httpOnly(true)
                 .secure(false)          // true in prod (HTTPS)
                 .path("/")
                 .maxAge(Duration.ofDays(7))
-                .sameSite("Lax")        // fine for localhost:3000 ↔ 8080
+                .sameSite("Lax")        // dev: localhost:3000 ↔ 8080
                 .build();
         res.addHeader(HttpHeaders.SET_COOKIE, cookie.toString());
 
-        // Clean redirect (no token in URL)
-        res.sendRedirect(frontendCallback);
+        // IMPORTANT: include the token in the URL so SPA can store it in localStorage
+        // Use fragment (#token=...) to avoid Referer leaking the JWT
+        String redirect = frontendCallback
+                + "#token=" + URLEncoder.encode(jwt, StandardCharsets.UTF_8);
+        res.sendRedirect(redirect);
     }
 }
-
-
-//THANH 1234edr2346534634456356
